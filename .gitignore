@@ -1,0 +1,90 @@
+### .NET build / runtime ###
+bin/
+obj/
+[Bb]uild/
+[Ll]ogs/
+*.log
+*.db
+*.db-shm
+*.db-wal
+
+### User secrets / sensitive ###
+appsettings.*.json
+appsettings.*.local.json
+secrets.json
+*.secret.json
+*.key
+*.pfx
+*.pem
+
+### Environment variables ###
+.env
+.env.*
+
+### Visual Studio / Rider ###
+.vs/
+.vscode/
+.idea/
+*.user
+*.sln.docstates
+
+### NuGet ###
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+
+### Resharper / DotTrace / Rider ###
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+### Mac / Linux / Windows files ###
+*.DS_Store
+*.swp
+*.swm
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+### Test results / Coverage ###
+TestResult*/
+TestResults/
+*.coverage
+*.coveragexml
+coverage/
+coverage.xml
+coverlet.json
+
+### Entity Framework ###
+Migrations/**/*.Designer.cs
+Migrations/**/__EFMigrationsHistory*
+*.sqlite
+*.mdf
+*.ldf
+
+### Docker ###
+docker-compose.override.yml
+**/docker-compose*.override.yml
+
+### Clean Architecture conventions ###
+# Output & temp files from application layers
+/src/**/wwwroot/
+src/**/PublishProfiles/
+src/**/Properties/launchSettings.json  # contains service URLs, ports
+
+# Optional (if you generate domain events via T4)
+*.tt
+*.ttinclude
+*.generated.cs
+
+### Logs (API / workers / services) ###
+*.log
+Logs/
+logs/
+
+### JetBrains Rider ###
+.idea/
+
+### SonarQube ###
+.sonar/
