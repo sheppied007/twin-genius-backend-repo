@@ -18,7 +18,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy
-            .WithOrigins("http://localhost:8080") // React dev server origin
+            .WithOrigins("http://localhost:8080", "https://app-digitwin-prod-fae0f8baergjhpfx.uksouth-01.azurewebsites.net") // React dev server origin
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
