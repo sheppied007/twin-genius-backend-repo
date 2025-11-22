@@ -4,6 +4,9 @@ using TokenBroker.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Cache
+builder.Services.AddMemoryCache();
+
 //Dependency injection
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
