@@ -2,16 +2,34 @@ using TokenBroker.Domain.Responses;
 using Microsoft.Identity.Client;
 using Microsoft.Extensions.Configuration;
 using TokenBroker.Application.Interfaces;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace TokenBroker.Infrastructure.Implementations;
 
 public class TokenService : ITokenService
 {
     private readonly IConfiguration _config;
-    public TokenService(IConfiguration config) => _config = config;
+    private readonly IMemoryCache _cache;
+
+    public TokenService(IConfiguration config, IMemoryCache cache)
+    {
+        _config = config;
+        _cache = cache;
+    }
 
     public async Task<AccessTokenResponse> GetTokenAsync(string scope)
     {
+        var cacheKey = $"token:{scope}";
+
+        if (_cache.TryGetValue(cacheKey, out AccessTokenResponse cachedToken))
+        {
+            // Avoid returning tokens close to expiration (e.g., 1 minute left)
+            if (cachedToken != null && cachedToken.ExpiresIn > DateTimeOffset.UtcNow.AddMinutes(1).ToUnixTimeSeconds())
+            {
+                return cachedToken;
+            }
+        }
+
         var tenantId = _config["AzureAd:TenantId"];
         var clientId = _config["AzureAd:ClientId"];
         var clientSecret = _config["AzureAd:ClientSecret"];
@@ -23,6 +41,12 @@ public class TokenService : ITokenService
 
         var result = await app.AcquireTokenForClient(new[] { scope }).ExecuteAsync();
 
-        return new AccessTokenResponse(result.AccessToken, result.ExpiresOn.ToUnixTimeSeconds());
+        var newToken = new AccessTokenResponse(result.AccessToken, result.ExpiresOn.ToUnixTimeSeconds());
+
+        var expiry = result.ExpiresOn - TimeSpan.FromMinutes(1);
+
+        _cache.Set(cacheKey, newToken, expiry);
+
+        return newToken;
     }
 }
