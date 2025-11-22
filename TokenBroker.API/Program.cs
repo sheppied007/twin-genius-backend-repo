@@ -36,5 +36,6 @@ app.UseCors("AllowFrontend");
 
 //Endpoints
 app.MapTokenEndpoints();
+app.MapHealthEndpoints();
 
 app.Run();
